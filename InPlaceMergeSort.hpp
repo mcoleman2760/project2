@@ -19,10 +19,15 @@ int inPlaceMergeSort(std::vector<int>& nums, int& duration) {
         }
     }
 
-    int median = nums[nums.size() / 2];
+    //int median = nums[nums.size() / 2];
 
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
 
-    return median;
+
+    if (nums.size() % 2 == 0){
+      return nums[((nums.size() / 2) +((nums.size() / 2)-1)) /2 ];
+    }
+    return nums[nums.size() / 2];
+   
 }
