@@ -22,11 +22,12 @@ int mergeSort(std::vector<int>& nums, int& duration) {
 
         std::copy(aux.begin(), aux.end(), nums.begin());
     }
-
-    int median = nums[nums.size() / 2];
-
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+    if (nums.size() % 2 == 0){
+      return nums[((nums.size() / 2) +((nums.size() / 2)-1)) /2 ];
 
-    return median;
+    }
+    return nums[nums.size() / 2];
+
 }
