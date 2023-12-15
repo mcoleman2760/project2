@@ -43,8 +43,13 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
 
-    // Return the median
-    return nums[medianIndex];
+    if (nums.size() % 2 == 0){
+      return nums[((nums.size() / 2) + ((nums.size() / 2)-1)) /2 ];
+
+    }
+    return nums[nums.size() / 2];
+
+    
 }
 
 #endif  // HALF_SELECTION_SORT_HPP
