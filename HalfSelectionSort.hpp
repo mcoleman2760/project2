@@ -36,10 +36,9 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
     }
 
     // Swap the median element into its proper place
-    if (size % 2 == 0){
-         size_t medianIndex = nums[((size / 2) + ((size / 2)-1)) /2 ];
-    }
+    
         size_t medianIndex = size / 2;
+    
     
     
     auto minIndex = std::min_element(nums.begin() + medianIndex, nums.end());
@@ -48,8 +47,13 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
 
+    if (nums.size() % 2 == 0){
+      return nums[((nums.size() / 2) +((nums.size() / 2)-1)) /2 ];
 
+    }
     return nums[medianIndex];
+
+    
  
 }
 
