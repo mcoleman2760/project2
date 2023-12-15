@@ -12,21 +12,13 @@ int standardSort(std::vector<int>& nums, int& duration) {
 
     auto end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+    
+    if (nums.size() % 2 == 0){
+      return nums[((nums.size() / 2) +((nums.size() / 2)-1)) /2 ];
 
-    size_t size = nums.size();
-    size_t middleIndex = size / 2;
-
-    // Calculate the median
-    int median;
-    if (size % 2 == 0) {
-        // Even-sized vector
-        median = (nums[middleIndex - 1] + nums[middleIndex]) / 2;
-    } else {
-        // Odd-sized vector
-        median = nums[middleIndex];
     }
+    return nums[nums.size() / 2];
 
-    return median;
 }
 
-#endif  // STANDARD_SORT_HPP
+#endif 
