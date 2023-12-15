@@ -8,9 +8,22 @@
 void percDown(std::vector<int>& heap, std::vector<int>::size_type hole){
     int tmp = std::move(heap[hole]);
 
-    while (hole > 0 && tmp > heap[(hole - 1) / 2]) {
-        heap[hole] = std::move(heap[(hole - 1) / 2]);
-        hole = (hole - 1) / 2;
+    while (2 * hole + 1 < heap.size() - 1) {
+        std::vector<int>::size_type leftChild = 2 * hole + 1;
+        std::vector<int>::size_type rightChild = leftChild + 1;
+
+        // If the right child exists and is greater than the left child
+        if (rightChild < heap.size() - 1 && heap[rightChild] > heap[leftChild]) {
+            ++leftChild; // Move to the left child
+        }
+
+        // If the value in the hole is greater than or equal to the larger of the children, break
+        if (tmp >= heap[leftChild]) {
+            break;
+        }
+
+        heap[hole] = std::move(heap[leftChild]);
+        hole = leftChild;
     }
 
     heap[hole] = std::move(tmp);
