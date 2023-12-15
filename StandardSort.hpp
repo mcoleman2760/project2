@@ -18,10 +18,9 @@ int standardSort(std::vector<int>& nums, int& duration) {
     }
 
     else {
-      return ((nums[(nums.size()-1)/2] + nums[nums.size()/2])/2);
+      return (nums[(((nums.size())/2)-2)] + nums[(nums.size()/2)/2]);
     }
 
-    return nums[nums.size() / 2];
 }
 
 #endif  
