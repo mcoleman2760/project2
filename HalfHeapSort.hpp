@@ -6,56 +6,63 @@
 #include <chrono>
 
 void percDown(std::vector<int>& heap, std::vector<int>::size_type hole){
-    int value = heap[0]; // value to be inserted into the hole
+    int child;
+    int tmp = std::move(heap[0]); 
+    // holds the value of the first function in the heap
 
-    while (hole * 2 + 1 < heap.size()) {
-        std::vector<int>::size_type child = hole * 2 + 1;
-
-        if (child + 1 < heap.size() && heap[child + 1] == heap[child]) {
-            // If the right child exists and is equal to the left child, use it instead
+    // While node has at least one child
+    for (int tmp = std::move(heap[0]); hole * 2 < heap.size(); hole = child) {
+        // Finds the smaller child 
+        child = 2*hole;
+        if(child + 1 < heap.size() && heap[child] > heap[child+1]) {
             ++child;
         }
-
-        if (heap[child] > value) {
-            heap[hole] = heap[child];
+        
+        // swaps if child has a lower value then node
+        if(tmp > heap[child]) {
+            heap[hole] = std::move(heap[child]); 
             hole = child;
-        } else {
+        }
+        else { 
             break;
         }
     }
-
-    heap[hole] = value;
+    
+   // Puts temp value in hole
+    heap[hole] = std::move(tmp);
 }
 
 void buildHeap(std::vector<int>& heap){
-     for (std::vector<int>::size_type i = heap.size() / 2; i > 0; i--) {
+     for (int i = (heap.size() - 1) / 2; i > 0; i--) {
+        heap[0] = heap[i];
         percDown(heap, i);
     }
 }
 
 int halfHeapSort(std::vector<int>& nums, int& duration){
      auto start = std::chrono::high_resolution_clock::now();
-  // Move the first element to the back
-    std::swap(nums[0], nums[nums.size() - 1]);
+
+    nums.push_back(std::move(nums[0]));
 
     // Build max heap on the first half of the vector
     buildHeap(nums);
 
-    // Perform half heap sort on the second half of the vector
-    for (std::vector<int>::size_type i = nums.size() - 1; i > nums.size() / 2; --i) {
-        // Swap root (maximum element) with the last element in the unsorted portion
-        std::swap(nums[0], nums[i]);
+    int s = nums.size() - 2;
+    for (int i = 0; i < s / 2; i++) {
+       
+        nums[0] = nums[nums.size()-1];
+        nums.pop_back();
 
-        // Restore heap property on the reduced heap and store the median value
-        int median = nums.size() / 2;
-
-        if (i == nums.size() / 2 + 1) {
-            return median;
-        }
+        percDown(nums,1);
     }
 
-    // In case the vector size is even, return the median of the two middle elements
-    return (nums[nums.size() / 2] + nums[nums.size() / 2 - 1]) / 2;
+    auto stop = std::chrono::high_resolution_clock::now();
+    duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+
+    int median = nums[1];
+    return median;
+
+        
 }
 
 
