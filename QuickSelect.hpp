@@ -1,5 +1,5 @@
-#ifndef QUICKSELECT_HPP
-#define QUICKSELECT_HPP
+#ifndef QUICK_SELECT_HPP
+#define QUICK_SELECT_HPP
 
 #include <vector>
 #include <iterator>
