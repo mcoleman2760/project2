@@ -1,95 +1,53 @@
-#ifndef QUICK_SELECT_HPP
-#define QUICK_SELECT_HPP
-
+#include <iostream>
 #include <vector>
-#include <iterator>
 #include <algorithm>
 #include <chrono>
 
-
-
-
-std::vector<int>::iterator medianOfThree(std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator mid = low + (high - low) / 2;
-
-    // Choose the median of three as the pivot
-    std::vector<int>::iterator pivot = low;
-
-    if (*mid < *pivot) {
-        std::iter_swap(mid, pivot);
-    }
-
-    if (*high < *pivot) {
-        std::iter_swap(high, pivot);
-    }
-
-    if (*mid > *high) {
-        std::iter_swap(mid, high);
-    }
-
-    return mid; // Return the iterator to the chosen pivot
-}
-
-// Function to perform the Hoare partition
-
 std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator pivot = high;
+    int pivot = *low;
+    auto i = low - 1;
+    auto j = high + 1;
 
     while (true) {
         do {
-            ++low;
-        } while (*low < *pivot);
+            i++;
+        } while (*i < pivot);
 
         do {
-            --high;
-        } while (*high > *pivot);
+            j--;
+        } while (*j > pivot);
 
-        if (low >= high) {
-            return high;
+        if (i >= j) {
+            return j;
         }
 
-        std::iter_swap(low, high);
+        std::iter_swap(i, j);
     }
 }
 
-// Helper function for pivot selection and placement
-
-void selectAndPlacePivot(std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator pivot = medianOfThree(low, high);
-    std::iter_swap(pivot, high);
-}
-
-// Recursive QuickSelect function
-
-int quickSelectHelper(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    // Base case: if subarray size is 10 or less, use std::sort
-    if (std::distance(low, high) <= 10) {
-        std::sort(low, high + 1);
-        return *(low + std::distance(low, high) / 2);
-    }
-
-    // Choose pivot and place it in position
-    selectAndPlacePivot(low, high);
-    std::vector<int>::iterator pivotIterator = hoarePartition(nums, low, high);
-
-    // Recursive case: recurse on one side of the pivot
-    if (pivotIterator > low) {
-        return quickSelectHelper(nums, low, pivotIterator - 1);
-    } else {
-        return *pivotIterator;
-    }
-}
-
-// Function to perform QuickSelect
+// Function to perform quick select
 int quickSelect(std::vector<int>& nums, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    int result = quickSelectHelper(nums, nums.begin(), nums.end() - 1);
+    // Using Hoare's partition
+    std::vector<int>::iterator low = nums.begin();
+    std::vector<int>::iterator high = nums.end() - 1;
+    int k = nums.size() / 2; // Change k to the desired position (e.g., median)
+
+    while (low <= high) {
+        std::vector<int>::iterator pivot = hoarePartition(nums, low, high);
+
+        if (pivot == nums.begin() + k) {
+            break; // Found the element at the k-th position
+        } else if (pivot < nums.begin() + k) {
+            low = pivot + 1;
+        } else {
+            high = pivot - 1;
+        }
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-    return result;
+    return *(nums.begin() + k);
 }
-
-#endif // QUICKSELECT_HPP
