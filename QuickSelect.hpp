@@ -61,7 +61,7 @@ void selectAndPlacePivot(Iterator low, Iterator high) {
 
 // Recursive QuickSelect function
 template<typename Iterator>
-int quickSelectHelper(std::vector<int>& nums, Iterator low, Iterator high) {
+int quickSelectHelper(Iterator low, Iterator high) {
     // Base case: if subarray size is 10 or less, use std::sort
     if (std::distance(low, high) <= 10) {
         std::sort(low, high + 1);
@@ -74,7 +74,7 @@ int quickSelectHelper(std::vector<int>& nums, Iterator low, Iterator high) {
 
     // Recursive case: recurse on one side of the pivot
     if (pivotIterator > low) {
-        return quickSelectHelper(nums, low, pivotIterator - 1);
+        return quickSelectHelper( low, pivotIterator - 1);
     } else {
         return *pivotIterator;
     }
@@ -84,7 +84,7 @@ int quickSelectHelper(std::vector<int>& nums, Iterator low, Iterator high) {
 int quickSelect(std::vector<int>& nums, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    int result = quickSelectHelper(nums ,nums.begin(), nums.end() - 1);
+    int result = quickSelectHelper(nums.begin(), nums.end() - 1);
 
     auto end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
