@@ -1,5 +1,3 @@
-#ifndef HALFHEAPSORT_HPP
-#define HALFHEAPSORT_HPP
 
 #include <vector>
 #include <algorithm>
@@ -65,7 +63,3 @@ int halfHeapSort(std::vector<int>& nums, int& duration){
         
 }
 
-
-
-
-#endif // HALFHEAPSORT_HPP
