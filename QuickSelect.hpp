@@ -6,6 +6,9 @@
 #include <algorithm>
 #include <chrono>
 
+
+std::vector<int>::iterator hoarePartition ( std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high );
+
 template<typename Iterator>
 Iterator medianOfThree(Iterator low, Iterator high) {
     Iterator mid = low + (high - low) / 2;
@@ -30,7 +33,7 @@ Iterator medianOfThree(Iterator low, Iterator high) {
 
 // Function to perform the Hoare partition
 template<typename Iterator>
-Iterator hoarePartition(Iterator low, Iterator high) {
+std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
     Iterator pivot = high;
 
     while (true) {
