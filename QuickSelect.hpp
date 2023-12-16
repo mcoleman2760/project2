@@ -21,19 +21,10 @@ std::vector<int>::iterator medianOfThree(std::vector<int>& nums, std::vector<int
     return middle;
 }
 
-// Function to select and place pivot using the median-of-three method
-std::vector<int>::iterator selectAndPlacePivot(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
+// Function to perform Hoare partition with median-of-three pivot selection and placement
+std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
     std::vector<int>::iterator pivot = medianOfThree(nums, low, high);
 
-    // Move the pivot to the rightmost position (just before 'high')
-    std::iter_swap(pivot, high - 1);
-    
-    return high - 1; // Return the iterator to the pivot
-}
-
-// Function to perform Hoare partition with pivot selection and placement
-std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator pivot = selectAndPlacePivot(nums, low, high);
     int pivotValue = *pivot;
     auto i = low - 1;
     auto j = high;
@@ -55,11 +46,11 @@ std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<in
     }
 }
 
-// Function to perform quick select with pivot selection and placement
+// Function to perform quick select with median-of-three pivot selection and placement
 int quickSelect(std::vector<int>& nums, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Using Hoare's partition with pivot selection and placement
+    // Using Hoare's partition with median-of-three pivot selection and placement
     std::vector<int>::iterator low = nums.begin();
     std::vector<int>::iterator high = nums.end() - 1;
     int k = nums.size() / 2; // Change k to the desired position (e.g., median)
