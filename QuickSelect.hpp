@@ -5,76 +5,80 @@
 
 // Function to find the median of three elements
 std::vector<int>::iterator medianOfThree(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator middle = low + (high - low) / 2;
+    auto mid = low + std::distance(low, high) / 2;
 
-    // Sort the low, middle, and high elements
-    if (*middle < *low) {
-        std::iter_swap(middle, low);
-    }
-    if (*high < *low) {
-        std::iter_swap(high, low);
-    }
-    if (*high < *middle) {
-        std::iter_swap(high, middle);
-    }
+    // Sort the three elements
+    if (*low > *mid)
+        std::iter_swap(low, mid);
+    if (*mid > *high)
+        std::iter_swap(mid, high);
+    if (*low > *mid)
+        std::iter_swap(low, mid);
 
-    return middle;
+    // Place the median at the end (pivot position)
+    std::iter_swap(mid, high);
+
+    return high;
 }
 
-// Function to perform Hoare partition with median-of-three pivot selection and placement
+// Hoare partition method
 std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
-    std::vector<int>::iterator pivot = medianOfThree(nums, low, high);
-
-    int pivotValue = *pivot;
-    auto i = low;
+    auto pivotIter = high;
+    int pivot = *pivotIter;
+    auto i = low - 1;
     auto j = high;
 
     while (true) {
-        // Move i to the right until an element greater than or equal to the pivot is found
-        while (*i < pivotValue) {
-            i++;
-        }
+        do {
+            ++i;
+        } while (*i < pivot);
 
-        // Move j to the left until an element less than or equal to the pivot is found
-        while (*j > pivotValue) {
-            j--;
-        }
+        do {
+            --j;
+        } while (*j > pivot && j > low);
 
         if (i >= j) {
-            return j;
+            // Swap the pivot into its correct position
+            std::iter_swap(i, pivotIter);
+            return i;
         }
 
+        // Swap elements to maintain the partition
         std::iter_swap(i, j);
-
-        // Increment and decrement iterators to avoid going out of bounds
-        i++;
-        j--;
     }
 }
 
-// Function to perform quick select with median-of-three pivot selection and placement
-int quickSelect(std::vector<int>& nums, int& duration) {
+// QuickSelect algorithm
+int quickSelect(std::vector<int>& nums, int k, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Using Hoare's partition with median-of-three pivot selection and placement
-    std::vector<int>::iterator low = nums.begin();
-    std::vector<int>::iterator high = nums.end() - 1;
-    int k = nums.size() / 2; // Change k to the desired position (e.g., median)
+    auto low = nums.begin();
+    auto high = nums.end() - 1;
 
-    while (low <= high) {
-        std::vector<int>::iterator pivot = hoarePartition(nums, low, high);
-
-        if (pivot == nums.begin() + k) {
-            break; // Found the element at the k-th position
-        } else if (pivot < nums.begin() + k) {
-            low = pivot + 1;
-        } else {
-            high = pivot - 1;
+    while (high > low) {
+        // Use quicksort for small subarrays
+        if (std::distance(low, high) + 1 <= 10) {
+            std::sort(low, high + 1);
+            break;
         }
+
+        // Choose pivot using median of three method
+        auto pivotIter = medianOfThree(nums, low, high);
+
+        // Call hoarePartition to place the pivot in its correct position
+        auto pivotIndex = hoarePartition(nums, low, high);
+
+        // Recur on the smaller side of the pivot
+        if (pivotIndex > k)
+            high = nums.begin() + pivotIndex - 1;
+        else if (pivotIndex < k)
+            low = nums.begin() + pivotIndex + 1;
+        else
+            break; // Pivot is at the correct position
     }
 
     auto end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-    return *(nums.begin() + k);
+    return nums[k];
 }
