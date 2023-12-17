@@ -61,18 +61,21 @@ void insertionSort(std::vector<int>& nums, std::vector<int>::iterator low, std::
 }
 
 // Function to perform Quickselect
-int quickSelect(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high, int& duration) {
+int quickSelect(std::vector<int>& nums, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
+
+    std::vector<int>::iterator low = nums.begin();
+    std::vector<int>::iterator high = nums.end() - 1;
 
     while (high - low + 1 > 10) {
         std::vector<int>::iterator pivot = hoarePartition(nums, low, high);
         
         // Recurse on the smaller partition
         if (pivot - low < high - pivot) {
-            quickSelect(nums, low, pivot - 1, duration);
+            quickSelect(nums, duration);
             low = pivot + 1;
         } else {
-            quickSelect(nums, pivot + 1, high, duration);
+            quickSelect(nums, duration);
             high = pivot - 1;
         }
     }
@@ -81,7 +84,7 @@ int quickSelect(std::vector<int>& nums, std::vector<int>::iterator low, std::vec
     insertionSort(nums, low, high);
 
     auto end = std::chrono::high_resolution_clock::now();
-    duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
     return *(low + (high - low) / 2);
 }
