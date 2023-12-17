@@ -21,13 +21,16 @@ std::vector<int>::iterator medianOfThree(std::vector<int>& nums, std::vector<int
     return middle;
 }
 
-// Function to perform Hoare partition with median-of-three pivot selection and placement
+// Function to perform Hoare partition with pivot placement
 std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
     std::vector<int>::iterator pivot = medianOfThree(nums, low, high);
-
     int pivotValue = *pivot;
+
+    // Move the pivot to the rightmost position (just before 'high')
+    std::iter_swap(pivot, high - 1);
+    
     auto i = low;
-    auto j = high;
+    auto j = high - 1;
 
     while (true) {
         // Move i to the right until an element greater than or equal to the pivot is found
@@ -52,29 +55,33 @@ std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<in
     }
 }
 
-// Function to perform quick select with median-of-three pivot selection and placement
-int quickSelect(std::vector<int>& nums, int& duration) {
+// Helper function to perform quick sort when the subarray size is 10 or less
+void insertionSort(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
+    std::sort(low, high + 1);
+}
+
+// Function to perform Quickselect
+int quickSelect(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
-    // Using Hoare's partition with median-of-three pivot selection and placement
-    std::vector<int>::iterator low = nums.begin();
-    std::vector<int>::iterator high = nums.end() - 1;
-    int k = nums.size() / 2; // Change k to the desired position (e.g., median)
-
-    while (low <= high) {
+    while (high - low + 1 > 10) {
         std::vector<int>::iterator pivot = hoarePartition(nums, low, high);
-
-        if (pivot == nums.begin() + k) {
-            break; // Found the element at the k-th position
-        } else if (pivot < nums.begin() + k) {
+        
+        // Recurse on the smaller partition
+        if (pivot - low < high - pivot) {
+            quickSelect(nums, low, pivot - 1, duration);
             low = pivot + 1;
         } else {
+            quickSelect(nums, pivot + 1, high, duration);
             high = pivot - 1;
         }
     }
 
-    auto end = std::chrono::high_resolution_clock::now();
-    duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+    // Use insertion sort for small subarrays
+    insertionSort(nums, low, high);
 
-    return *(nums.begin() + k);
+    auto end = std::chrono::high_resolution_clock::now();
+    duration += std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
+
+    return *(low + (high - low) / 2);
 }
