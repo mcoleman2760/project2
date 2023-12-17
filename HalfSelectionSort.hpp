@@ -7,54 +7,35 @@
 #include <iterator>
 #include <chrono>
 #include <iostream>
+#include <math.h>
 
 int halfSelectionSort(std::vector<int>& nums, int& duration) {
+    // Check if the input size is too big for selection sort
+    if (nums.size() > 50000) {
+        std::cout << "Input size is too big for selection sort (>50,000)." << std::endl;
+        return -1;  
+    }
+
     auto start = std::chrono::high_resolution_clock::now();
 
-    size_t size = nums.size();
-    size_t halfSize = size / 2;
+    std::vector<int>::iterator i;
+    std::vector<int>::iterator minimum;
+    std::vector<int>::iterator it;
 
-    // Check if the input size is too big for selection sort
-    if (size > 50000) {
-        std::cout << "Input size is too big for selection sort (>50,000)." << std::endl;
-        duration = -1;  // Indicate that the method was not executed due to input size
-        return -1;  // Return an invalid value
-    }
-
-    for (size_t i = 0; i < halfSize; ++i) {
+    for (i = nums.begin(); i <= nums.begin() + ((nums.size()-1)/2); ++i) {
         // Find the index of the minimum element in the remaining unsorted part
-        auto minIndex = std::min_element(nums.begin() + i, nums.end());
-
-        // Swap the current element with the smallest element found
-        std::iter_swap(nums.begin() + i, minIndex);
-
-        // If there are duplicates of the smallest element, swap the first one reached
-        auto firstDuplicate = std::find(nums.begin() + i + 1, nums.end(), nums[i]);
-        if (firstDuplicate != nums.end()) {
-            std::iter_swap(nums.begin() + i + 1, firstDuplicate);
-        }
+         minimum = i;
+         for(it = i + 1; it!= nums.end(); ++it){
+            if(*it < *minimum)
+            {
+                minimum = it;
+            }
+            std::iter_swap(i,minimum);
+         }
     }
-
-    // Swap the median element into its proper place
-    
-        size_t medianIndex = size / 2;
-    
-    
-    
-    auto minIndex = std::min_element(nums.begin() + medianIndex, nums.end());
-    std::iter_swap(nums.begin() + medianIndex, minIndex);
-
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
-
-    if (nums.size() % 2 == 0){
-      return nums[((nums.size() / 2) +((nums.size() / 2)-1)) /2 ];
-
-    }
-    return nums[nums.size() / 2];
-
-    
- 
+    return *(nums.begin() + (nums.size() - 1 / 2));
 }
 
 #endif  // HALF_SELECTION_SORT_HPP
