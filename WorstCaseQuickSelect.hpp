@@ -9,8 +9,8 @@ std::vector<int> worstCaseQuickSelect() {
         input[i] = i + 1;
     }
 
-    // Shuffle the vector to avoid any patterns
+    // Shuffle the vector so it does not repeat
     std::random_shuffle(input.begin(), input.end());
-
+    //returns vector
     return input;
 }
