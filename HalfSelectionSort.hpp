@@ -8,7 +8,8 @@
 
 int halfSelectionSort(std::vector<int>& nums, int& duration) {
     // Check if the input size is too big for selection sort
-    if (nums.size() > 50000) {
+    if (nums.size() > 50000) 
+    {
         std::cout << "Input size is too big for selection sort (>50,000)." << std::endl;
         return -1;  
     }
@@ -26,9 +27,9 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
             if(*it < *minimum)
             {
                 minimum = it;
-            }
-            std::iter_swap(i,minimum);
-         }
+            } 
+         } 
+         std::iter_swap(i,minimum);
     }
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
