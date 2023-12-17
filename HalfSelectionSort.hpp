@@ -1,7 +1,4 @@
 
-#ifndef HALF_SELECTION_SORT_HPP
-#define HALF_SELECTION_SORT_HPP
-
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -35,7 +32,6 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
     }
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
-    return *(nums.begin() + (nums.size() - 1 / 2));
+    return *(nums.begin() + (nums.size() - 1)/2);
 }
 
-#endif  // HALF_SELECTION_SORT_HPP
