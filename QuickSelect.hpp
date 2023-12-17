@@ -26,23 +26,29 @@ std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<in
     std::vector<int>::iterator pivot = medianOfThree(nums, low, high);
 
     int pivotValue = *pivot;
-    auto i = low - 1;
+    auto i = low;
     auto j = high;
 
     while (true) {
-        do {
+        // Move i to the right until an element greater than or equal to the pivot is found
+        while (*i < pivotValue) {
             i++;
-        } while (*i < pivotValue);
+        }
 
-        do {
+        // Move j to the left until an element less than or equal to the pivot is found
+        while (*j > pivotValue) {
             j--;
-        } while (*j > pivotValue);
+        }
 
         if (i >= j) {
             return j;
         }
 
         std::iter_swap(i, j);
+
+        // Increment and decrement iterators to avoid going out of bounds
+        i++;
+        j--;
     }
 }
 
