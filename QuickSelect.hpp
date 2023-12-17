@@ -49,7 +49,7 @@ std::vector<int>::iterator hoarePartition(std::vector<int>& nums, std::vector<in
 }
 
 // QuickSelect algorithm
-int quickSelect(std::vector<int>& nums, int k, int& duration) {
+int quickSelect(std::vector<int>& nums, int& duration) {
     auto start = std::chrono::high_resolution_clock::now();
 
     auto low = nums.begin();
@@ -69,9 +69,9 @@ int quickSelect(std::vector<int>& nums, int k, int& duration) {
         auto pivotIndex = hoarePartition(nums, low, high);
 
         // Recur on the smaller side of the pivot
-        if (pivotIndex > k)
+        if (pivotIndex > low)
             high = nums.begin() + pivotIndex - 1;
-        else if (pivotIndex < k)
+        else if (pivotIndex < low)
             low = nums.begin() + pivotIndex + 1;
         else
             break; // Pivot is at the correct position
@@ -80,5 +80,5 @@ int quickSelect(std::vector<int>& nums, int k, int& duration) {
     auto end = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count();
 
-    return nums[k];
+    return *low;
 }
