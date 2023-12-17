@@ -1,6 +1,4 @@
-#ifndef STANDARD_SORT_HPP
-#define STANDARD_SORT_HPP
-
+#pragma once
 #include <vector>
 #include <algorithm>
 #include <chrono>
@@ -22,4 +20,3 @@ int standardSort(std::vector<int>& nums, int& duration) {
 
 }
 
-#endif 
