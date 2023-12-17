@@ -13,9 +13,9 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
         std::cout << "Input size is too big for selection sort (>50,000)." << std::endl;
         return -1;  
     }
-
+    // start the clock to test the duration
     auto start = std::chrono::high_resolution_clock::now();
-
+    // iterators for the for loop
     std::vector<int>::iterator i;
     std::vector<int>::iterator minimum;
     std::vector<int>::iterator it;
@@ -31,8 +31,10 @@ int halfSelectionSort(std::vector<int>& nums, int& duration) {
          } 
          std::iter_swap(i,minimum);
     }
+    //stops the clock and sets the duration
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
+    // returns the median
     return *(nums.begin() + (nums.size() - 1)/2);
 }
 
