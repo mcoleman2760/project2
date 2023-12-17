@@ -8,7 +8,7 @@
 std::vector<int>::iterator medianOfThree(std::vector<int>& nums, std::vector<int>::iterator low, std::vector<int>::iterator high) {
     std::vector<int>::iterator middle = low + (high - low) / 2;
 
-    // Sort the low, middle, and high elements
+    // Sorts the low, middle, and high elements of the vector
     if (*middle < *low) {
         std::iter_swap(middle, low);
     }
@@ -18,7 +18,7 @@ std::vector<int>::iterator medianOfThree(std::vector<int>& nums, std::vector<int
     if (*high < *middle) {
         std::iter_swap(high, middle);
     }
-
+    // returns median
     return middle;
 }
 
