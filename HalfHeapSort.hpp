@@ -4,24 +4,28 @@
 #include <chrono>
 
 void percDown(std::vector<int>& heap, std::vector<int>::size_type hole){
+    //uses the percDown function found in the textbook
     int child;
     int tmp = std::move(heap[0]); 
-    // holds the value of the first function in the heap
+    
 
     // While node has at least one child
     for (int tmp = std::move(heap[0]); hole * 2 < heap.size(); hole = child) {
-        // Finds the smaller child 
+        // Finds  smaller child 
         child = 2*hole;
-        if(child + 1 < heap.size() && heap[child] > heap[child+1]) {
+        if(child + 1 < heap.size() && heap[child] > heap[child+1]) 
+        {
             ++child;
         }
         
         // swaps if child has a lower value then node
-        if(tmp > heap[child]) {
+        if(tmp > heap[child])
+         {
             heap[hole] = std::move(heap[child]); 
             hole = child;
         }
-        else { 
+        else 
+        { 
             break;
         }
     }
@@ -31,6 +35,7 @@ void percDown(std::vector<int>& heap, std::vector<int>::size_type hole){
 }
 
 void buildHeap(std::vector<int>& heap){
+    //uses the bui
      for (int i = (heap.size() - 1) / 2; i > 0; i--) {
         heap[0] = heap[i];
         percDown(heap, i);
@@ -38,11 +43,12 @@ void buildHeap(std::vector<int>& heap){
 }
 
 int halfHeapSort(std::vector<int>& nums, int& duration){
+     //starts clock for duration
      auto start = std::chrono::high_resolution_clock::now();
 
     nums.push_back(std::move(nums[0]));
 
-    // Build max heap on the first half of the vector
+    // used buildHeap function for the vector
     buildHeap(nums);
 
     int s = nums.size() - 2;
@@ -53,10 +59,10 @@ int halfHeapSort(std::vector<int>& nums, int& duration){
 
         percDown(nums,1);
     }
-
+    //stops the clock for duration
     auto stop = std::chrono::high_resolution_clock::now();
     duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start).count();
-
+    //finds the median and returns it
     int median = nums[1];
     return median;
 
