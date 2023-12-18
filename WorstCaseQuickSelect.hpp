@@ -6,7 +6,7 @@ std::vector<int> worstCaseQuickSelect() {
     std::vector<int> input(20000);
 
     // Fill the vector with numbers from 1 to 20000
-    for (int i = 0; i < 20000; ++i) {
+    for (int i = 0; i < input.size(); ++i) {
         input[i] = i + 1;
     }
 
