@@ -3,15 +3,14 @@
 #include <algorithm>
 
 std::vector<int> worstCaseQuickSelect() {
-    std::vector<int> input(20000);
+    //makes worst case quick select
+    int vector_size = 20000;
+    std::vector<int> result;
+    result.reserve(vector_size);
 
-    // Fill the vector with numbers from 1 to 20000
-    for (int i = 0; i < input.size(); ++i) {
-        input[i] = i + 1;
+    for (int i = vector_size; i >= 1; --i) {
+        result.push_back(i);
     }
 
-    // Shuffle the vector so it does not repeat
-    std::random_shuffle(input.begin(), input.end());
-    //returns vector
-    return input;
+    return result;
 }
